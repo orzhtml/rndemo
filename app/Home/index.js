@@ -9,12 +9,6 @@ class Home extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar />
-        {global.ios && (
-          <ListRow
-            title="react-native-tableview demo"
-            onPress={() => this.props.navigation.navigate('sections')}
-          />
-        )}
         <ListRow
           title="关键字高亮"
           onPress={() => this.props.navigation.navigate('MyModal')}

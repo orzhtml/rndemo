@@ -3,7 +3,6 @@ import { Dimensions, Animated, Easing } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import Home from '../Home';
-import Example1 from '../Example/Example1';
 import Example2 from '../Example/Example2';
 import Example3 from '../Example/Example3';
 import Example4 from '../Example/Example4';
@@ -16,15 +15,6 @@ const MainStack = createStackNavigator(
   {
     Home: {
       screen: Home,
-    },
-    sections: {
-      screen: Example1,
-      navigationOptions: {
-        title: 'react-native-tableview demo',
-        gestureResponseDistance: {
-          horizontal: width / 2,
-        },
-      },
     },
     webview: {
       screen: Example3,

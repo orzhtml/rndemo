@@ -12,6 +12,7 @@ const MyStatusBar = ({ backgroundColor, ...props }) => (
 export default class extends React.Component {
   constructor(props) {
     super(props);
+    console.log('global.status_h: ', global.status_h)
   }
 
   render() {

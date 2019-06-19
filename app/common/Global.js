@@ -10,7 +10,7 @@ global.sw = Dimensions.get('window').width;
 // 获取屏幕高度
 global.sh = Dimensions.get('window').height;
 // 状态栏高度
-global.status_h = global.IOS
+global.status_h = global.ios
   ? getStatusBarHeight()
   : StatusBar.currentHeight;
 // 最小线宽
