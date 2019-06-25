@@ -1,4 +1,4 @@
-import entities from 'entities';
+import { StyleSheet } from 'react-native';
 // css 转换为 rn-css
 export function inheritedStyle(style) {
   let styleJson = {};
@@ -80,22 +80,25 @@ export function MathRand(n) {
 }
 // 检查是否 p 标签有 img 嵌套
 export function checkIsTag(dom) {
-  let isBlock = false;
+  let isBlock = true;
   dom.map(item => {
     if (item.type === 'tag') {
       switch (item.name) {
-        case 'img':
-        case 'mark':
-        case 'h1':
-        case 'h2':
-        case 'h3':
-        case 'h4':
-        case 'h5':
-        case 'h6':
-          isBlock = true;
+        case 'strong':
+        case 'span':
+        case 'a':
+          isBlock = false;
           break;
+        default:
+        isBlock = true;
+        break;
       }
     }
   });
   return isBlock;
+}
+export function filtersCss(styles, parent) {
+  if (!parent) return null;
+  const style = StyleSheet.flatten(styles[parent.name]) || {};
+  return { ...style };
 }

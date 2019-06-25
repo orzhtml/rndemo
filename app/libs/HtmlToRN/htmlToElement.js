@@ -79,12 +79,13 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
     if (!dom) return null;
     return dom.map((node, index, list) => {
       let NodeComponent = null;
+      let ShareNewsTextParagraphRand = util.MathRand(6);
+      let nodeKey = 'nodeKey-' + index;
 
       if (node.type === 'text') {
         if (checkSpace(node.data)) {
           return null;
         }
-        let ShareNewsTextParagraphRand = util.MathRand(6);
         return (
           <Text
             ref={v =>
@@ -92,8 +93,8 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
                 'ShareNewsTextParagraph' + index + ShareNewsTextParagraphRand
               ] = v)
             }
-            key={index}
-            style={[styles[opts.size], styles.mt]}
+            key={nodeKey}
+            style={[styles[opts.size], { color: opts.globalColor }, styles.mt]}
             onLongPress={() => {
               let text = entities.decodeHTML(node.data);
               // 长按
@@ -116,19 +117,20 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
         switch (node.name) {
           case 'br':
             if (
-              parent.name === 'span' ||
-              parent.name === 'strong' ||
-              parent.name === 'a'
+              parent &&
+              (parent.name === 'span' ||
+                parent.name === 'strong' ||
+                parent.name === 'a')
             ) {
-              NodeComponent = <Text key={index}>{opts.paragraphBreak}</Text>;
+              NodeComponent = <Text key={nodeKey}>{opts.paragraphBreak}</Text>;
             } else {
-              NodeComponent = <View key={index} style={{ height: 10 }} />;
+              NodeComponent = <View key={nodeKey} style={{ height: 10 }} />;
             }
             break;
           case 'img':
             NodeComponent = (
               <TouchableOpacity
-                key={index}
+                key={nodeKey}
                 onPress={() => {
                   opts.onImagePress(node.attribs.src);
                 }}
@@ -144,21 +146,19 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
           case 'span':
           case 'strong':
           case 'a':
-            let isStrong = node.name === 'strong';
-            let ShareNewsTagParagraphRand = util.MathRand(7);
+            ShareNewsTextParagraphRand = util.MathRand(7);
             NodeComponent = (
               <Text
                 ref={v =>
                   (this[
-                    'ShareNewsTagParagraph' + index + ShareNewsTagParagraphRand
+                    'ShareNewsTagParagraph' + index + ShareNewsTextParagraphRand
                   ] = v)
                 }
-                key={index}
+                key={nodeKey}
                 style={[
                   styles[opts.size],
-                  {
-                    fontWeight: isStrong ? 'bold' : 'normal',
-                  },
+                  { color: opts.globalColor },
+                  util.filtersCss(opts.styles, node),
                 ]}
                 onLongPress={() => {
                   let text = lineLabelMap(node.children);
@@ -169,7 +169,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
                     view: this[
                       'ShareNewsTagParagraph' +
                         index +
-                        ShareNewsTagParagraphRand
+                        ShareNewsTextParagraphRand
                     ],
                     content: text,
                   });
@@ -185,7 +185,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
             } else {
               let ShareNewsTagPParagraphRand = util.MathRand(8);
               NodeComponent = (
-                <View key={index} style={[styles.mt]}>
+                <View key={nodeKey} style={[styles.mt]}>
                   <Text
                     ref={v =>
                       (this[
@@ -194,7 +194,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
                           ShareNewsTagPParagraphRand
                       ] = v)
                     }
-                    style={[styles[opts.size]]}
+                    style={[styles[opts.size], { color: opts.globalColor }]}
                     onLongPress={() => {
                       let text = lineLabelMap(node.children);
                       // 长按
@@ -222,29 +222,17 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
           case 'h4':
           case 'h5':
           case 'h6':
-            let fontSize = 12;
-            if (node.name === 'h1') {
-              fontSize = 22;
-            } else if (node.name === 'h2') {
-              fontSize = 20;
-            } else if (node.name === 'h3') {
-              fontSize = 18;
-            } else if (node.name === 'h4') {
-              fontSize = 16;
-            } else if (node.name === 'h5') {
-              fontSize = 14;
-            }
-            let ShareNewsTagHParagraphRand = util.MathRand(5);
+            ShareNewsTextParagraphRand = util.MathRand(5);
             NodeComponent = (
               <Text
                 ref={v =>
                   (this[
                     'ShareNewsTagHParagraph' +
                       index +
-                      ShareNewsTagHParagraphRand
+                      ShareNewsTextParagraphRand
                   ] = v)
                 }
-                key={index}
+                key={nodeKey}
                 onLongPress={() => {
                   let text = lineLabelMap(node.children);
                   // 长按
@@ -254,12 +242,16 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
                     view: this[
                       'ShareNewsTagHParagraph' +
                         index +
-                        ShareNewsTagHParagraphRand
+                        ShareNewsTextParagraphRand
                     ],
                     content: text,
                   });
                 }}
-                style={[{ fontSize: fontSize, fontWeight: '700' }, styles.mt]}
+                style={[
+                  styles.mt,
+                  { color: opts.globalColor },
+                  util.filtersCss(opts.styles, node),
+                ]}
               >
                 {labelTextView(node.children, node)}
               </Text>
@@ -267,44 +259,35 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
             break;
           case 'video':
             NodeComponent = (
-              <View key={index} style={{ minHeight: 340 }}>
+              <View key={nodeKey} style={{ minHeight: 340 }}>
                 <Video
                   controls={node.attribs.controls === 'controls'}
-                  // poster={node.attribs.poster}
-                  source={{ uri: node.attribs.src }} // Can be a URL or a local file.
+                  source={{ uri: node.attribs.src }}
                   style={{ flex: 1 }}
                   paused={true}
-                  // ref={ref => {
-                  //   this.player = ref;
-                  // }} // Store reference
                   onBuffer={e => {
                     console.log('onBuffer: ', e);
-                  }} // Callback when remote video is buffering
+                  }}
                   onError={e => {
                     console.log('onError: ', e);
-                  }} // Callback when video cannot be loaded
+                  }}
                 />
               </View>
-              // <Video
-              //   key={index}
-              //   controls={node.attribs.controls === 'controls'}
-              //   source={{ uri: node.attribs.src }} // Can be a URL or a local file.
-              //   style={[{ flex: 1, minHeight: 300 }, styles.mt]}
-              //   paused={true}
-              // />
             );
             break;
           case 'mark':
             NodeComponent = (
               <View
-                key={index}
+                key={nodeKey}
                 style={[styles.mt, util.inheritedStyle(node.attribs.style)]}
               >
                 {node.children.map((item, idx) => {
+                  let ShareNewsTagMarkParagraphRand = util.MathRand(4);
+                  let childrenKey = 'childrenKey-' + idx;
                   if (item.name === 'author') {
                     return (
                       <View
-                        key={idx}
+                        key={childrenKey}
                         style={[{ alignItems: 'flex-end' }, styles.mt]}
                       >
                         <Text
@@ -318,9 +301,8 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
                       </View>
                     );
                   }
-                  let ShareNewsTagMarkParagraphRand = util.MathRand(4);
                   return (
-                    <View key={idx}>
+                    <View key={childrenKey}>
                       <Text
                         ref={v =>
                           (this[
@@ -362,7 +344,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
             break;
           default:
             NodeComponent = (
-              <View key={index} style={[styles.mt]}>
+              <View key={nodeKey} style={[styles.mt]}>
                 {domToElement(node.children, node)}
               </View>
             );
@@ -375,16 +357,15 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
   // 循环嵌套 text
   function labelTextView(dom, parent) {
     return dom.map((item, index) => {
+      let tagKey = 'tagKey-' + index;
       if (item.type === 'text') {
-        let isStrong = parent.name === 'strong';
         return (
           <Text
-            key={index}
+            key={tagKey}
             style={[
               styles[opts.size],
-              {
-                fontWeight: isStrong ? 'bold' : 'normal',
-              },
+              { color: opts.globalColor },
+              util.filtersCss(opts.styles, parent),
             ]}
           >
             {entities.decodeHTML(item.data)}

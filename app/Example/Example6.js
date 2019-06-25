@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import api from '../api/api';
 import StatusBar from '../components/StatusBar';
 import HTMLView from '../libs/HtmlToRN';
 
@@ -281,18 +282,11 @@ export default class Example6 extends React.Component {
   }
 
   fetchData = async () => {
-    let res = await this.mock(this.htmlSource);
+    let res = await api.mock(this.htmlSource);
     this.setState({
       htmlSource: res,
     });
     this.sendImages(res);
-  };
-
-  mock = (data, t) => {
-    return new Promise((resolve, reject) => {
-      t = t || Math.random() * 1500;
-      setTimeout(resolve, t, data);
-    });
   };
 
   sendImages = html => {

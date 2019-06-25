@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 
+import api from '../api/api';
 import StatusBar from '../components/StatusBar';
 
 const _BaseScript = `
@@ -38,15 +39,8 @@ export default class Example3 extends React.Component {
     this.fetchData();
   }
 
-  mock = (data, t) => {
-    return new Promise((resolve, reject) => {
-      t = t || Math.random() * 1500;
-      setTimeout(resolve, t, data);
-    });
-  };
-
   fetchData = async () => {
-    let res = await this.mock(
+    let res = await api.mock(
       '<p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><div class="video-view"><div class="video-main" id="gddflvplayer" style="height:380px;"><video src="https://kavt.oss-cn-shanghai.aliyuncs.com/VIDEO/1.mp4" controls="controls" poster="http://img3.jiemian.com/101/original/20190618/156083859733495100.jpg" webkit-playsinline style="width:100%;max-height:100%;"></video></div>',
     );
     this.setState({

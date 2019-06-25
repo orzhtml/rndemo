@@ -10,6 +10,10 @@ class Home extends React.Component {
       <View style={{ flex: 1 }}>
         <StatusBar />
         <ListRow
+          title="TimeLine demo"
+          onPress={() => this.props.navigation.navigate('TimeLine')}
+        />
+        <ListRow
           title="关键字高亮"
           onPress={() => this.props.navigation.navigate('MyModal')}
         />

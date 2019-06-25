@@ -1,17 +1,27 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View, ViewPropTypes } from 'react-native';
+import { Dimensions, StyleSheet, View, ViewPropTypes, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 import htmlToElement from './htmlToElement';
 
 const boldStyle = { fontWeight: 'bold' };
+const italicStyle = {fontStyle: 'italic'};
+const underlineStyle = {textDecorationLine: 'underline'};
+const strikethroughStyle = {textDecorationLine: 'line-through'};
 const fontSize = 'normal'; // 最小(smallest)、小(small)、正常(normal)、大(big)、最大(largest)
 const imagesMaxWidth = Dimensions.get('window').width;
+const codeStyle = {fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'};
 // 以后做标签样式对照表
 const baseStyles = StyleSheet.create({
   b: boldStyle,
+  i: italicStyle,
+  em: italicStyle,
+  u: underlineStyle,
+  s: strikethroughStyle,
   strong: boldStyle,
   span: { fontWeight: 'normal' },
-  p: {},
+  pre: codeStyle,
+  code: codeStyle,
+  a: { fontWeight: 'normal' },
   h1: { fontWeight: 'bold', fontSize: 36 },
   h2: { fontWeight: 'bold', fontSize: 30 },
   h3: { fontWeight: 'bold', fontSize: 24 },
@@ -30,9 +40,10 @@ class HtmlView extends React.PureComponent {
 
   componentDidMount() {
     this.mounted = true;
-    let { html, fontSize } = this.props;
+    let { html, fontSize, globalColor } = this.props;
     this.startHtmlRender({
-      html: html,
+      html,
+      globalColor,
       size: fontSize,
     });
   }
@@ -41,12 +52,14 @@ class HtmlView extends React.PureComponent {
     if (
       this.props.html !== nextProps.html ||
       this.props.stylesheet !== nextProps.stylesheet ||
-      this.props.fontSize !== nextProps.fontSize
+      this.props.fontSize !== nextProps.fontSize ||
+      this.props.globalColor !== nextProps.globalColor
     ) {
       this.startHtmlRender({
         html: nextProps.html,
         style: nextProps.stylesheet,
         size: nextProps.fontSize,
+        globalColor: nextProps.globalColor,
       });
     }
   }
@@ -55,7 +68,7 @@ class HtmlView extends React.PureComponent {
     this.mounted = false;
   }
 
-  startHtmlRender = ({ html, style, size }) => {
+  startHtmlRender = ({ html, style, size, globalColor }) => {
     const {
       stylesheet,
       onError,
@@ -80,6 +93,7 @@ class HtmlView extends React.PureComponent {
       onLongPress,
       onMarkPress,
       debug,
+      globalColor
     };
 
     htmlToElement(html, opts, (err, element) => {
@@ -117,6 +131,7 @@ HtmlView.propTypes = {
   onLongPress: PropTypes.func,
   onMarkPress: PropTypes.func,
   debug: PropTypes.bool,
+  globalColor: PropTypes.string,
 };
 
 HtmlView.defaultProps = {
@@ -129,6 +144,7 @@ HtmlView.defaultProps = {
   onLongPress: () => {},
   onMarkPress: () => {},
   debug: false,
+  globalColor: '#222'
 };
 
 export default HtmlView;
