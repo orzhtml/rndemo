@@ -28,6 +28,7 @@ class FlatListView extends React.Component {
   constructor(props) {
     super(props);
     this.rows = [];
+    this.refreshing = true;
     this.state = {
       dataSource: [],
       isRefreshing: false,
@@ -51,19 +52,16 @@ class FlatListView extends React.Component {
     let { setRefreshing, setRefresh } = this.props;
     if (this.mounted) {
       setRefreshing && setRefreshing(true);
-      this.setState(
-        {
-          isRefreshing: true,
-        },
-        () => {
-          setRefresh && setRefresh(this.postRefresh, this.endFetch);
-        },
-      );
+      this.onRefreshing(true);
+      this.setState({
+        isRefreshing: true,
+      });
+      setRefresh && setRefresh(this.postRefresh, this.endFetch);
     }
   };
   /** 刷新处理数据 */
   postRefresh = (rows = []) => {
-    let { notRefresh } = this.props;
+    let { notRefresh, initialNumToRender } = this.props;
     if (this.mounted) {
       let paginationStatus = PaginationStatus.WAITING;
       let mergedRows = [];
@@ -71,6 +69,9 @@ class FlatListView extends React.Component {
         mergedRows = rows;
       } else {
         mergedRows = rows.concat(this.getRows());
+      }
+      if (rows.length < initialNumToRender) {
+        paginationStatus = PaginationStatus.ALL_LOADED;
       }
       this.updateRows(mergedRows, paginationStatus);
     }
@@ -85,6 +86,17 @@ class FlatListView extends React.Component {
       isRefreshing,
       pagination,
       paginationStatus,
+      'refreshing: ',
+      this.refreshing,
+    );
+    if (this.refreshing) return;
+    console.log(
+      'onEndReached TableList2：',
+      isRefreshing,
+      pagination,
+      paginationStatus,
+      'refreshing: ',
+      this.refreshing,
     );
     if (
       !isRefreshing &&
@@ -136,16 +148,13 @@ class FlatListView extends React.Component {
       console.log('updateRows B');
       mergedRows = this.getRows().slice();
     }
-    this.setState(
-      {
-        dataSource: mergedRows,
-        isRefreshing: false,
-        paginationStatus,
-      },
-      () => {
-        setRefreshing && setRefreshing(false);
-      },
-    );
+    this.setState({
+      dataSource: mergedRows,
+      isRefreshing: false,
+      paginationStatus,
+    });
+    this.refreshing = false;
+    setRefreshing && setRefreshing(false);
   };
   /** 手动刷新 */
   refresh = () => {
@@ -171,15 +180,11 @@ class FlatListView extends React.Component {
       paginationStatus = PaginationStatus.ALL_LOADED;
     }
     this.setRows(rows);
-    this.setState(
-      {
-        dataSource: rows,
-        paginationStatus,
-      },
-      () => {
-        this.onRefreshing(false);
-      },
-    );
+    this.setState({
+      dataSource: rows,
+      paginationStatus,
+    });
+    this.onRefreshing(false);
   };
   /** 上拉加载结束 */
   endFetch = () => {
@@ -193,9 +198,7 @@ class FlatListView extends React.Component {
 
   onRefreshing = refreshing => {
     console.log('onRefreshing');
-    this.setState({
-      isRefreshing: refreshing,
-    });
+    this.refreshing = refreshing;
   };
 
   setRows = rows => (this.rows = rows);
@@ -328,6 +331,10 @@ class FlatListView extends React.Component {
 
   _ListEmptyComponent = () => {
     let { EmptyView, EmptyViewText } = this.props;
+    let { paginationStatus } = this.state;
+    if (paginationStatus !== PaginationStatus.NO_DATA) {
+      return null;
+    }
     if (EmptyView) {
       return EmptyView();
     }
@@ -378,28 +385,24 @@ class FlatListView extends React.Component {
     return null;
   };
 
+  _keyExtractor = (item, index) => 'RenderItemKey-' + index;
+
   render() {
     const { keyIdx, numColumns } = this.props;
-    const { dataSource, paginationStatus } = this.state;
-
-    let ListEmptyComponent = null;
-
-    if (paginationStatus === PaginationStatus.NO_DATA) {
-      ListEmptyComponent = this._ListEmptyComponent;
-    }
-
+    const { dataSource } = this.state;
     return (
       <FlatList
         onEndReachedThreshold={0.1}
         ItemSeparatorComponent={this.renderItemSeparatorComponent}
         numColumns={numColumns}
+        keyExtractor={this._keyExtractor}
         {...this.props}
         key={keyIdx}
         ref={ref => (this._flatList = ref)}
         data={dataSource}
         ListHeaderComponent={this._ListHeaderComponent}
         ListFooterComponent={this._ListFooterComponent}
-        ListEmptyComponent={ListEmptyComponent}
+        ListEmptyComponent={this._ListEmptyComponent}
         onEndReached={this.onEndReached}
         refreshControl={this.renderRefreshControl()}
       />
@@ -411,13 +414,13 @@ FlatListView.defaultProps = {
   initialNumToRender: 10,
   numColumns: 1,
   refreshable: true,
-  renderItem: null,
   keyIdx: 'FlatListViewKey',
   // refreshing func
   setRefreshing: null,
   setRefresh: null,
   setEndReached: null,
   notRefresh: false,
+  renderItem: null,
   // Custom View
   PaginationBtnView: null,
   paginationFetchingView: null,
