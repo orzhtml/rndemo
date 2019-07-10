@@ -9,6 +9,7 @@ import Example3 from '../Example/Example3';
 import Example4 from '../Example/Example4';
 import Example5 from '../Example/Example5';
 import Example6 from '../Example/Example6';
+import Example7 from '../Example/Example7';
 
 const { width, height } = Dimensions.get('window');
 
@@ -62,9 +63,18 @@ const MainStack = createStackNavigator(
         },
       },
     },
+    FlatList: {
+      screen: Example7,
+      navigationOptions: {
+        title: 'FlatList demo',
+        gestureResponseDistance: {
+          horizontal: width / 2,
+        },
+      },
+    },
   },
   {
-    initialRouteName: 'TimeLine',
+    initialRouteName: 'FlatList',
     headerMode: 'none',
     defaultNavigationOptions: {
       gesturesEnabled: true,

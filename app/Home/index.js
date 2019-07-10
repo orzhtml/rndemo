@@ -33,6 +33,10 @@ class Home extends React.Component {
           title="react-native-webview demo"
           onPress={() => this.props.navigation.navigate('webview')}
         />
+        <ListRow
+          title="FlatList demo"
+          onPress={() => this.props.navigation.navigate('FlatList')}
+        />
       </View>
     );
   }
