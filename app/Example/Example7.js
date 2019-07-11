@@ -132,10 +132,12 @@ class RenderItems extends React.PureComponent {
 class AnimatedHeaderView extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.spinValue = new Animated.Value(0);
+    this.spinWidthValue = new Animated.Value(0);
+    this.spinHeightValue = new Animated.Value(0);
     this.timer = null;
-    this.startAni = null;
-    this.endAni = null;
+    this.state = {
+      height: 0,
+    };
   }
   componentDidMount() {}
   componentWillReceiveProps(nextProps) {
@@ -151,52 +153,68 @@ class AnimatedHeaderView extends React.PureComponent {
     this._stopTimer();
   }
   _start = () => {
-    this.spinValue.setValue(0);
+    this.spinWidthValue.setValue(0);
+    this.spinHeightValue.setValue(0);
     this._stopTimer();
-    this.startAni && this.startAni.stop();
-    this.endAni && this.endAni.stop();
-    this.endAni = null;
-    this.startAni = Animated.timing(this.spinValue, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.inOut(Easing.linear),
-    }).start(() => {
-      this.timer = setTimeout(() => {
-        this._end();
-      }, 1000);
-    });
-  };
-  _end = () => {
-    this.endAni = Animated.timing(this.spinValue, {
-      toValue: 0,
-      duration: 300,
-      easing: Easing.inOut(Easing.linear),
-    }).start(() => {
-      this.spinValue.setValue(0);
-      this._stopTimer();
-    });
+
+    this.setState({
+        height: 34,
+      }, () => {
+        Animated.timing(this.spinWidthValue, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.inOut(Easing.linear),
+        }).start(() => {
+          this.timer = setTimeout(() => {
+            Animated.timing(this.spinHeightValue, {
+              toValue: 1,
+              duration: 200,
+              easing: Easing.inOut(Easing.linear),
+            }).start();
+            this.setState({
+              height: this.spinHeightValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [34, 0],
+              }),
+            });
+          }, 1000);
+        });
+      },
+    );
   };
   _stopTimer = () => {
-    clearTimeout(this.timer);
+    this.timer && clearTimeout(this.timer);
     this.timer = null;
   };
   render() {
     let { headerText } = this.props;
-    const height = this.spinValue.interpolate({
+    let { height } = this.state;
+
+    const width = this.spinWidthValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [0, 34],
+      outputRange: [100, global.sw],
     });
+
     return (
       <Animated.View
         style={{
-          backgroundColor: '#d6e9f7',
           justifyContent: 'center',
           alignItems: 'center',
           overflow: 'hidden',
           height,
         }}
       >
-        <Text style={{ fontSize: 12, color: '#3289bf' }}>{headerText}</Text>
+        <Animated.View
+          style={{
+            backgroundColor: '#d6e9f7',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 34,
+            width,
+          }}
+        >
+          <Text style={{ fontSize: 12, color: '#3289bf' }}>{headerText}</Text>
+        </Animated.View>
       </Animated.View>
     );
   }
