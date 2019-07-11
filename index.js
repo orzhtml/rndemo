@@ -1,10 +1,18 @@
-/**
- * @format
- * @lint-ignore-every XPLATJSCOPYRIGHT1
- */
+/** @format */
+import React from "react";
+import { AppRegistry, YellowBox } from "react-native";
 
-import {AppRegistry} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+import './app/common/Global';
+import App from "./App";
+import { name as appName } from "./app.json";
 
-AppRegistry.registerComponent(appName, () => App);
+class rndemo extends React.Component {
+  render() {
+    return <App />;
+  }
+}
+
+console.disableYellowBox = true;
+YellowBox.ignoreWarnings(["Require cycle:", "Warning: isMounted(...)"]);
+
+AppRegistry.registerComponent(appName, () => rndemo);
