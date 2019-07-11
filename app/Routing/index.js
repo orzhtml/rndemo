@@ -74,17 +74,10 @@ const MainStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'FlatList',
+    initialRouteName: 'Home',
     headerMode: 'none',
     defaultNavigationOptions: {
       gesturesEnabled: true,
-      // headerStyle: {
-      //   backgroundColor: "#f4511e"
-      // },
-      // headerTintColor: "#fff",
-      // headerTitleStyle: {
-      //   fontWeight: "bold"
-      // }
     },
   },
 );
