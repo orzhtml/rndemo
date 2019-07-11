@@ -94,15 +94,15 @@ class Example7 extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar />
-        {this._AnimatedHeaderView()}
+        <StatusBar backgroundColor="red" />
         <FlatListView
           style={{ flex: 1 }}
           initialNumToRender={12}
           // ItemSeparatorComponent={null}
           ref={ref => (this._flatList = ref)}
           renderItem={this._renderItem}
-          notRefresh={true}
+          // notRefresh={true}
+          HeaderView={this._AnimatedHeaderView}
           refreshable={true}
           setRefresh={this._setRefresh}
           setEndReached={this._setEndReached}
@@ -159,7 +159,7 @@ class AnimatedHeaderView extends React.PureComponent {
     this.startAni = Animated.timing(this.spinValue, {
       toValue: 1,
       duration: 200,
-      easing: Easing.inOut(Easing.ease),
+      easing: Easing.inOut(Easing.linear),
     }).start(() => {
       this.timer = setTimeout(() => {
         this._end();
@@ -170,8 +170,9 @@ class AnimatedHeaderView extends React.PureComponent {
     this.endAni = Animated.timing(this.spinValue, {
       toValue: 0,
       duration: 300,
-      easing: Easing.inOut(Easing.ease),
+      easing: Easing.inOut(Easing.linear),
     }).start(() => {
+      this.spinValue.setValue(0);
       this._stopTimer();
     });
   };
@@ -189,9 +190,10 @@ class AnimatedHeaderView extends React.PureComponent {
       <Animated.View
         style={{
           backgroundColor: '#d6e9f7',
-          height,
           justifyContent: 'center',
           alignItems: 'center',
+          overflow: 'hidden',
+          height,
         }}
       >
         <Text style={{ fontSize: 12, color: '#3289bf' }}>{headerText}</Text>
