@@ -9,9 +9,10 @@ class Example7 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      headerHeight: new Animated.Value(0),
-      headerText: '头部',
+      headerText: '最新推荐成功',
+      refreshing: false,
     };
+    this.textIndex = 0;
   }
 
   // 页面初始
@@ -32,18 +33,14 @@ class Example7 extends React.Component {
       { name: '06', id: '106' },
       { name: '07', id: '107' },
       { name: '08', id: '108' },
-      { name: '09', id: '109' },
-      { name: '10', id: '110' },
-      { name: '11', id: '111' },
-      { name: '12', id: '112' },
-      { name: '13', id: '113' },
-      { name: '14', id: '114' },
-      { name: '15', id: '115' },
     ]);
     this._flatList && this._flatList.firstAddData(res);
   };
 
   _setRefresh = async (startFetch, abortFetch) => {
+    this.setState({
+      refreshing: true,
+    });
     let res = await api.mock([
       { name: '01', id: '101' },
       { name: '02', id: '102' },
@@ -57,15 +54,14 @@ class Example7 extends React.Component {
       { name: '10', id: '110' },
       { name: '11', id: '111' },
       { name: '12', id: '112' },
-      { name: '13', id: '113' },
-      { name: '14', id: '114' },
-      { name: '15', id: '115' },
     ]);
     this.setState({
-      headerText: '这是头部',
+      headerText: `本次推荐 ${res.length} 条更新 - ${this.textIndex}`,
+      refreshing: false,
     });
     startFetch(res);
     this.page = 0;
+    this.textIndex++;
   };
   _setEndReached = async (startFetch, abortFetch) => {
     if (this.page === 1) {
@@ -73,12 +69,12 @@ class Example7 extends React.Component {
       return false;
     }
     let res = await api.mock([
+      { name: '13', id: '113' },
+      { name: '14', id: '114' },
+      { name: '15', id: '115' },
       { name: '16', id: '116' },
       { name: '17', id: '117' },
     ]);
-    this.setState({
-      headerText: '这是头部2',
-    });
     startFetch(res);
     this.page = 1;
   };
@@ -88,18 +84,21 @@ class Example7 extends React.Component {
     return <RenderItems key={key} data={item} />;
   };
 
-  _HeaderView = () => {
-    let { headerText } = this.state;
-    return <HeaderView headerText={headerText} />;
+  _AnimatedHeaderView = () => {
+    let { headerText, refreshing } = this.state;
+    return (
+      <AnimatedHeaderView headerText={headerText} refreshing={refreshing} />
+    );
   };
 
   render() {
     return (
       <View style={styles.container}>
         <StatusBar />
+        {this._AnimatedHeaderView()}
         <FlatListView
           style={{ flex: 1 }}
-          initialNumToRender={15}
+          initialNumToRender={12}
           // ItemSeparatorComponent={null}
           ref={ref => (this._flatList = ref)}
           renderItem={this._renderItem}
@@ -107,56 +106,12 @@ class Example7 extends React.Component {
           refreshable={true}
           setRefresh={this._setRefresh}
           setEndReached={this._setEndReached}
-          HeaderView={this._HeaderView}
           refreshableTitle="下拉刷新"
           allLoadedText="没有更多数据"
           waitingSpinnerText="加载中..."
           paginationBtnText="加载更多..."
         />
       </View>
-    );
-  }
-}
-
-class HeaderView extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      headerHeight: new Animated.Value(0),
-    };
-  }
-  componentDidMount() {
-    this._start();
-  }
-  _start = () => {
-    Animated.timing(this.state.headerHeight, {
-      toValue: 50,
-      duration: 1000,
-      easing: Easing.inOut(Easing.linear),
-    }).start();
-  };
-  _end = () => {
-    Animated.timing(this.state.headerHeight, {
-      toValue: 0,
-      duration: 1000,
-      easing: Easing.inOut(Easing.linear),
-    }).start();
-  };
-  render() {
-    let { headerText } = this.props;
-    let { headerHeight } = this.state;
-    console.log('headerText: ', headerText);
-    return (
-      <Animated.View
-        style={{
-          backgroundColor: 'red',
-          height: headerHeight,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ fontSize: 15, color: 'black' }}>{headerText}</Text>
-      </Animated.View>
     );
   }
 }
@@ -170,6 +125,77 @@ class RenderItems extends React.PureComponent {
       >
         <Text style={{ fontSize: 15, color: 'black' }}>{data.name}</Text>
       </View>
+    );
+  }
+}
+
+class AnimatedHeaderView extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.spinValue = new Animated.Value(0);
+    this.timer = null;
+    this.startAni = null;
+    this.endAni = null;
+  }
+  componentDidMount() {}
+  componentWillReceiveProps(nextProps) {
+    let { refreshing } = this.props;
+    if (refreshing === nextProps.refreshing) {
+      return false;
+    }
+    if (!nextProps.refreshing) {
+      this._start();
+    }
+  }
+  componentWillUnmount() {
+    this._stopTimer();
+  }
+  _start = () => {
+    this.spinValue.setValue(0);
+    this._stopTimer();
+    this.startAni && this.startAni.stop();
+    this.endAni && this.endAni.stop();
+    this.endAni = null;
+    this.startAni = Animated.timing(this.spinValue, {
+      toValue: 1,
+      duration: 200,
+      easing: Easing.inOut(Easing.ease),
+    }).start(() => {
+      this.timer = setTimeout(() => {
+        this._end();
+      }, 1000);
+    });
+  };
+  _end = () => {
+    this.endAni = Animated.timing(this.spinValue, {
+      toValue: 0,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+    }).start(() => {
+      this._stopTimer();
+    });
+  };
+  _stopTimer = () => {
+    clearTimeout(this.timer);
+    this.timer = null;
+  };
+  render() {
+    let { headerText } = this.props;
+    const height = this.spinValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 34],
+    });
+    return (
+      <Animated.View
+        style={{
+          backgroundColor: '#d6e9f7',
+          height,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text style={{ fontSize: 12, color: '#3289bf' }}>{headerText}</Text>
+      </Animated.View>
     );
   }
 }

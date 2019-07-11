@@ -81,23 +81,9 @@ class FlatListView extends React.Component {
     console.log('onEndReached TableList');
     let { pagination } = this.props;
     let { paginationStatus, isRefreshing } = this.state;
-    console.log(
-      'onEndReached TableList：',
-      isRefreshing,
-      pagination,
-      paginationStatus,
-      'refreshing: ',
-      this.refreshing,
-    );
-    if (this.refreshing) return;
-    console.log(
-      'onEndReached TableList2：',
-      isRefreshing,
-      pagination,
-      paginationStatus,
-      'refreshing: ',
-      this.refreshing,
-    );
+    if (this.refreshing) {
+      return false
+    }
     if (
       !isRefreshing &&
       pagination &&
@@ -124,7 +110,7 @@ class FlatListView extends React.Component {
   };
   /** 下一页 */
   postPaginate = (rows = []) => {
-    console.log('postPaginate TableList: ', rows);
+    console.log('postPaginate TableList');
     let mergedRows = [];
     let paginationStatus;
     if (rows.length === 0) {
@@ -138,7 +124,6 @@ class FlatListView extends React.Component {
   };
   /** 更新数据 */
   updateRows = (rows, paginationStatus) => {
-    console.log('updateRows TableList', rows, paginationStatus);
     let { setRefreshing } = this.props;
     let mergedRows = rows;
     if (rows.length) {
@@ -148,13 +133,13 @@ class FlatListView extends React.Component {
       console.log('updateRows B');
       mergedRows = this.getRows().slice();
     }
+    setRefreshing && setRefreshing(false);
     this.setState({
       dataSource: mergedRows,
       isRefreshing: false,
       paginationStatus,
     });
     this.refreshing = false;
-    setRefreshing && setRefreshing(false);
   };
   /** 手动刷新 */
   refresh = () => {
@@ -206,28 +191,28 @@ class FlatListView extends React.Component {
   getRows = () => this.rows;
 
   scrollToEnd = params => {
-    console.log('scrollToEnd TableList: ', params);
+    console.log('scrollToEnd TableList', params);
     if (this._flatList) {
       this._flatList.scrollToEnd(params);
     }
   };
 
   scrollToIndex = params => {
-    console.log('scrollToIndex TableList: ', params);
+    console.log('scrollToIndex TableList', params);
     if (this._flatList) {
       this._flatList.scrollToIndex(params);
     }
   };
 
   scrollToItem = params => {
-    console.log('scrollToItem TableList: ', params);
+    console.log('scrollToItem TableList', params);
     if (this._flatList) {
       this._flatList.scrollToItem(params);
     }
   };
 
   scrollToOffset = params => {
-    console.log('scrollToOffset TableList: ', params);
+    console.log('scrollToOffset TableList', params);
     if (this._flatList) {
       this._flatList.scrollToOffset(params);
     }
@@ -346,7 +331,6 @@ class FlatListView extends React.Component {
   };
   /** 自定义分割线 */
   renderItemSeparatorComponent = ({ highlighted }) => {
-    // console.log('ItemSeparatorComponent highlighted: ', highlighted);
     return (
       <View
         style={{
