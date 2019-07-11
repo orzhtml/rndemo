@@ -37,11 +37,11 @@ class Example7 extends React.Component {
     this._flatList && this._flatList.firstAddData(res);
   };
 
-  _setRefresh = async (startFetch, abortFetch) => {
+  _setRefresh = (startFetch, abortFetch) => {
     this.setState({
       refreshing: true,
     });
-    let res = await api.mock([
+    api.mock([
       { name: '01', id: '101' },
       { name: '02', id: '102' },
       { name: '03', id: '103' },
@@ -54,29 +54,37 @@ class Example7 extends React.Component {
       { name: '10', id: '110' },
       { name: '11', id: '111' },
       { name: '12', id: '112' },
-    ]);
-    this.setState({
-      headerText: `本次推荐 ${res.length} 条更新 - ${this.textIndex}`,
-      refreshing: false,
-    });
-    startFetch(res);
-    this.page = 0;
-    this.textIndex++;
+    ]).then(res => {
+      this.setState({
+        headerText: `本次推荐 ${res.length} 条更新 - ${this.textIndex}`,
+        refreshing: false,
+      });
+      this.page = 0;
+      this.textIndex++;
+      startFetch(res);
+    }).catch(e => {
+      console.log(e);
+      abortFetch();
+    })
   };
-  _setEndReached = async (startFetch, abortFetch) => {
+  _setEndReached = (startFetch, abortFetch) => {
     if (this.page === 1) {
       startFetch([]);
       return false;
     }
-    let res = await api.mock([
+     api.mock([
       { name: '13', id: '113' },
       { name: '14', id: '114' },
       { name: '15', id: '115' },
       { name: '16', id: '116' },
       { name: '17', id: '117' },
-    ]);
-    startFetch(res);
+    ]).then(res => {
+      startFetch(res);
     this.page = 1;
+    }).catch(e => {
+      console.log(e);
+      abortFetch();
+    })
   };
 
   _renderItem = ({ item, index }) => {
