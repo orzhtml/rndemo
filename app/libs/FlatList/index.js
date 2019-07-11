@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const PaginationStatus = {
   FIRST_LOAD: 0, // 第一次加载
@@ -82,7 +82,7 @@ class FlatListView extends React.Component {
     let { pagination } = this.props;
     let { paginationStatus, isRefreshing } = this.state;
     if (this.refreshing) {
-      return false
+      return false;
     }
     if (
       !isRefreshing &&
@@ -100,7 +100,9 @@ class FlatListView extends React.Component {
     let { paginationStatus } = this.state;
     if (paginationStatus !== PaginationStatus.ALL_LOADED) {
       console.log('onPaginate');
-      if (this.loadingMore) return;
+      if (this.loadingMore) {
+        return false;
+      }
       this.loadingMore = true;
       this.setState({
         paginationStatus: PaginationStatus.IN_LOADED,
@@ -266,7 +268,7 @@ class FlatListView extends React.Component {
       return (
         <View style={[styles.paginationView]}>
           <ActivityIndicator color={spinnerColor} size={waitingSpinnerSize} />
-          <Text style={[styles.paginationViewText, { marginLeft: 5 }]}>
+          <Text style={[styles.paginationViewText, styles.ml5]}>
             {waitingSpinnerText}
           </Text>
         </View>
@@ -324,22 +326,14 @@ class FlatListView extends React.Component {
       return EmptyView();
     }
     return (
-      <View style={{ alignItems: 'center' }}>
-        <Text style={{ lineHeight: 80 }}>{EmptyViewText}</Text>
+      <View style={styles.emptyView}>
+        <Text style={styles.emptyViewTxt}>{EmptyViewText}</Text>
       </View>
     );
   };
   /** 自定义分割线 */
   renderItemSeparatorComponent = ({ highlighted }) => {
-    return (
-      <View
-        style={{
-          backgroundColor: '#E7E7E7',
-          height: StyleSheet.hairlineWidth,
-          marginHorizontal: 10,
-        }}
-      />
-    );
+    return <View style={styles.line} />;
   };
   /** 下拉组件 */
   renderRefreshControl = () => {
@@ -411,6 +405,7 @@ FlatListView.defaultProps = {
   paginationAllLoadedView: null,
   paginationWaitingView: null,
   EmptyView: null,
+  HeaderView: null,
   // RefreshControl
   refreshableTitle: null,
   refreshableColors: ['dimgray', 'tomato', 'limegreen'],
@@ -447,6 +442,7 @@ FlatListView.propTypes = {
   paginationAllLoadedView: PropTypes.func,
   paginationWaitingView: PropTypes.func,
   EmptyView: PropTypes.func,
+  HeaderView: PropTypes.func,
   // RefreshControl
   refreshableTitle: PropTypes.string,
   refreshableColors: PropTypes.array,
@@ -525,6 +521,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
+  },
+  line: {
+    backgroundColor: '#E7E7E7',
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 10,
+  },
+  emptyView: {
+    alignItems: 'center',
+  },
+  emptyViewTxt: {
+    lineHeight: 80,
+  },
+  ml5: {
+    marginLeft: 5,
   },
 });
 
