@@ -18,10 +18,6 @@ class Home extends React.Component {
           onPress={() => this.props.navigation.navigate('MyModal')}
         />
         <ListRow
-          title="HTMLView"
-          onPress={() => this.props.navigation.navigate('HTMLView')}
-        />
-        <ListRow
           title="自定义 select"
           onPress={() => this.props.navigation.navigate('Select')}
         />
