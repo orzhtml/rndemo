@@ -1,6 +1,8 @@
 import { Dimensions, StyleSheet, Platform, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
+import { Images } from './Images';
+
 // 系统是苹果
 global.ios = Platform.OS === 'ios';
 // 系统是安卓
@@ -16,3 +18,5 @@ global.status_h = global.ios
 // 最小线宽
 global.p1 = StyleSheet.hairlineWidth
 global.t = 'transparent';
+
+global.Images = Images;

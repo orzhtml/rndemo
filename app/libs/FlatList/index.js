@@ -2,8 +2,6 @@
  * 上拉下拉
  */
 import * as React from 'react';
-import PropTypes from 'prop-types';
-
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,6 +11,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 const { width } = Dimensions.get('window');
 
