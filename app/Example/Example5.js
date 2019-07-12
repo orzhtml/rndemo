@@ -48,7 +48,6 @@ export default class Example5 extends React.Component {
     let overlayView = (
       <Overlay.PullView
         overlayOpacity={0.2}
-        modal={true}
         side="bottom"
         ref={v => (this.overlayPullView = v)}
       >
@@ -127,7 +126,6 @@ export default class Example5 extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
   },
   welcome: {
     fontSize: 20,

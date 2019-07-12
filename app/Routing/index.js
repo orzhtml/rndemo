@@ -77,7 +77,7 @@ const RootStack = createStackNavigator(
     Main: {
       screen: MainStack,
     },
-    MyModal: {
+    KeyHighlight: {
       screen: Example2,
       navigationOptions: {
         gesturesEnabled: true,
