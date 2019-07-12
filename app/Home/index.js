@@ -15,7 +15,7 @@ class Home extends React.Component {
         />
         <ListRow
           title="关键字高亮"
-          onPress={() => this.props.navigation.navigate('MyModal')}
+          onPress={() => this.props.navigation.navigate('KeyHighlight')}
         />
         <ListRow
           title="自定义 select"
