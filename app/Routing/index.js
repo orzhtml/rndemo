@@ -6,7 +6,7 @@ import Home from '../Home';
 import Example1 from '../Example/Example1';
 import Example2 from '../Example/Example2';
 import Example3 from '../Example/Example3';
-import Example4 from '../Example/Example4';
+// import Example4 from '../Example/Example4';
 import Example5 from '../Example/Example5';
 import Example6 from '../Example/Example6';
 import Example7 from '../Example/Example7';
@@ -18,6 +18,15 @@ const MainStack = createStackNavigator(
     Home: {
       screen: Home,
     },
+    TimeLine: {
+      screen: Example1,
+      navigationOptions: {
+        title: 'TimeLine demo',
+        gestureResponseDistance: {
+          horizontal: width / 2,
+        },
+      },
+    },
     webview: {
       screen: Example3,
       navigationOptions: {
@@ -27,15 +36,15 @@ const MainStack = createStackNavigator(
         },
       },
     },
-    HTMLView: {
-      screen: Example4,
-      navigationOptions: {
-        title: 'HTMLView demo',
-        gestureResponseDistance: {
-          horizontal: width / 2,
-        },
-      },
-    },
+    // HTMLView: {
+    //   screen: Example4,
+    //   navigationOptions: {
+    //     title: 'HTMLView demo',
+    //     gestureResponseDistance: {
+    //       horizontal: width / 2,
+    //     },
+    //   },
+    // },
     Select: {
       screen: Example5,
       navigationOptions: {
@@ -49,15 +58,6 @@ const MainStack = createStackNavigator(
       screen: Example6,
       navigationOptions: {
         title: 'htmlToRN demo',
-        gestureResponseDistance: {
-          horizontal: width / 2,
-        },
-      },
-    },
-    TimeLine: {
-      screen: Example1,
-      navigationOptions: {
-        title: 'TimeLine demo',
         gestureResponseDistance: {
           horizontal: width / 2,
         },

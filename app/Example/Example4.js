@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+// import HTMLView from 'react-native-htmlview';
 import Video from 'react-native-video';
 
 import StatusBar from '../components/StatusBar';
@@ -307,7 +307,9 @@ export default class Example4 extends React.Component {
         <StatusBar />
         <ScrollView style={styles.container}>
           <Text style={{ fontSize: 15, color: 'black' }}>xxxxxsadadsa</Text>
-          <HTMLView value={html} renderNode={this._renderNode} />
+          {
+            // <HTMLView value={html} renderNode={this._renderNode} />
+          }
         </ScrollView>
       </View>
     );

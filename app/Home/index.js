@@ -17,10 +17,12 @@ class Home extends React.Component {
           title="关键字高亮"
           onPress={() => this.props.navigation.navigate('MyModal')}
         />
-        <ListRow
-          title="HTMLView"
-          onPress={() => this.props.navigation.navigate('HTMLView')}
-        />
+        {
+          // <ListRow
+          //   title="HTMLView"
+          //   onPress={() => this.props.navigation.navigate('HTMLView')}
+          // />
+        }
         <ListRow
           title="自定义 select"
           onPress={() => this.props.navigation.navigate('Select')}
