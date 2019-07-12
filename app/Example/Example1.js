@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import api from '../api/api';
 import StatusBar from '../components/StatusBar';
@@ -139,7 +139,10 @@ class Example1 extends React.Component {
 
   _renderItem = (item, index) => {
     return (
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          console.log(item, index);
+        }}
         style={{
           marginLeft: this.p2px(56) + 14,
           paddingBottom: 10,
@@ -162,7 +165,7 @@ class Example1 extends React.Component {
         >
           {item.description}
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 

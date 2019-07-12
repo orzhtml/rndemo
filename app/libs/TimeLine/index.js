@@ -1,5 +1,16 @@
 import React from 'react';
-import { StyleSheet, Image, View, Text, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  ViewPropTypes,
+  Image,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
+import PropTypes from 'prop-types';
+
+const hairlineWidth = StyleSheet.hairlineWidth;
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -11,7 +22,8 @@ class Timeline extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.data === nextProps.data) {
+    let { data } = this.props;
+    if (data === nextProps.data) {
       return false;
     }
     this.setState({
@@ -82,50 +94,43 @@ class Timeline extends React.Component {
   };
 
   _renderDetail = (item, index) => {
-    let { circleSize, renderDetail } = this.props;
+    let { circleSize, renderDetail, onPress } = this.props;
     if (renderDetail) {
       return renderDetail(item, index);
     }
 
     return (
-      <View
+      <TouchableOpacity
+        activeOpacity={onPress ? 0.5 : 1}
+        onPress={() => {
+          onPress && onPress(item, index);
+        }}
         style={{
           marginLeft: circleSize ? circleSize + 14 : 15,
           paddingTop:
-            item.iconType === 'icon' ? circleSize / 2 / 2 - global.p1 : 0,
+            item.iconType === 'icon' ? circleSize / 2 / 2 - hairlineWidth : 0,
         }}
       >
-        <Text style={{ fontSize: 14, color: '#666', lineHeight: 20 }}>
-          {item.time}
-          <Text
-            style={{
-              fontSize: 16,
-              color: '#222',
-            }}
-          >
-            {item.description}
-          </Text>
+        <Text style={styles.timeText}>
+          {`${item.time}   `}
+          <Text style={styles.descText}>{item.description}</Text>
         </Text>
         {this._renderSeparator(item, index)}
-      </View>
+      </TouchableOpacity>
     );
   };
 
   _renderSeparator = (item, index) => {
     let { separatorView } = this.props;
     if (separatorView) {
-      return separatorView();
+      return separatorView(item, index);
     }
     return <View style={styles.separator} />;
   };
 
   _renderItem = ({ item, index }) => {
     return (
-      <View
-        style={{
-          paddingBottom: 10,
-        }}
-      >
+      <View style={styles.renderItem}>
         {this._renderTimeline(item, index)}
         {this._renderCircle(item, index)}
         {this._renderDetail(item, index)}
@@ -148,9 +153,32 @@ class Timeline extends React.Component {
   }
 }
 
+Timeline.defaultProps = {
+  circleSize: null,
+  timeLineColor: null,
+  renderDetail: null,
+  onPress: null,
+  separatorView: null,
+  style: null,
+  data: [],
+};
+
+Timeline.propTypes = {
+  circleSize: PropTypes.number,
+  timeLineColor: PropTypes.string,
+  renderDetail: PropTypes.func,
+  onPress: PropTypes.func,
+  separatorView: PropTypes.func,
+  style: ViewPropTypes.style,
+  data: PropTypes.array,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  renderItem: {
+    paddingBottom: 10,
   },
   CircleView: {
     position: 'absolute',
@@ -171,15 +199,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     flex: 1,
-    width: global.p1,
+    width: hairlineWidth,
   },
   timeLineColor: {
     backgroundColor: '#FFAC00',
   },
   separator: {
     backgroundColor: '#FFAC00',
-    height: global.p1,
+    height: hairlineWidth,
     marginTop: 10,
+  },
+  timeText: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
+  },
+  descText: {
+    fontSize: 16,
+    color: '#222',
   },
 });
 
