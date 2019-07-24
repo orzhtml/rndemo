@@ -259,9 +259,9 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
             break;
           case 'video':
             NodeComponent = (
-              <View key={nodeKey} style={{ minHeight: 340 }}>
+              <View key={nodeKey} style={{ minHeight: 280 }}>
                 <Video
-                  controls={node.attribs.controls === 'controls'}
+                  controls={true}
                   source={{ uri: node.attribs.src }}
                   style={{ flex: 1 }}
                   paused={true}

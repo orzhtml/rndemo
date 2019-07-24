@@ -72,8 +72,8 @@ export function resetHtml(html) {
 }
 /** 获取随机数 */
 export function MathRand(n) {
-  var Num = '';
-  for (var i = 0; i < n; i++) {
+  let Num = '';
+  for (let i = 0; i < n; i++) {
     Num += Math.floor(Math.random() * 10);
   }
   return Num;
