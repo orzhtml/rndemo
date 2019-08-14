@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React from 'react'
+import { Text, View, ScrollView } from 'react-native'
+import { WebView } from 'react-native-webview'
 
-import api from '../api/api';
-import StatusBar from '../components/StatusBar';
+import api from '../api/api'
+import StatusBar from '../components/StatusBar'
 
 const _BaseScript = `
   (function () {
@@ -21,31 +21,31 @@ const _BaseScript = `
     }
     setTimeout(changeHeight, 300);
   })()
-`;
+`
 
 export default class Example3 extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       webHeight: 0,
-      html: null,
-    };
+      html: null
+    }
   }
 
   // 页面初始
-  componentWillMount() {}
+  componentWillMount () {}
 
-  componentDidMount() {
-    this.fetchData();
+  componentDidMount () {
+    this.fetchData()
   }
 
   fetchData = async () => {
     let res = await api.mock(
-      '<p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><div class="video-view"><div class="video-main" id="gddflvplayer" style="height:380px;"><video src="https://kavt.oss-cn-shanghai.aliyuncs.com/VIDEO/1.mp4" controls="controls" poster="http://img3.jiemian.com/101/original/20190618/156083859733495100.jpg" webkit-playsinline style="width:100%;max-height:100%;"></video></div>',
-    );
+      '<p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><p>测试内容</p><div class="video-view"><div class="video-main" id="gddflvplayer" style="height:380px;"><video src="https://kavt.oss-cn-shanghai.aliyuncs.com/VIDEO/1.mp4" controls="controls" poster="http://img3.jiemian.com/101/original/20190618/156083859733495100.jpg" webkit-playsinline style="width:100%;max-height:100%;"></video></div>'
+    )
     this.setState({
-      html: this._setHtml(res),
-    });
+      html: this._setHtml(res)
+    })
   };
 
   _setHtml = html => {
@@ -85,25 +85,25 @@ export default class Example3 extends React.Component {
         <div>
             ${html}
         </div>
-    `;
-    return htmlTemp;
+    `
+    return htmlTemp
   };
 
   onMessage = event => {
     try {
-      const action = JSON.parse(event.nativeEvent.data);
+      const action = JSON.parse(event.nativeEvent.data)
       if (action.type === 'setHeight' && action.height > 0) {
         this.setState({
-          webHeight: action.height,
-        });
+          webHeight: action.height
+        })
       }
     } catch (error) {
       // pass
     }
   };
 
-  render() {
-    const { html, webHeight } = this.state;
+  render () {
+    const { html, webHeight } = this.state
     return (
       <View style={{ flex: 1 }}>
         <StatusBar />
@@ -123,7 +123,7 @@ export default class Example3 extends React.Component {
               style={{
                 height: webHeight,
                 width: global.sw,
-                marginTop: 10,
+                marginTop: 10
               }}
               allowsInlineMediaPlayback={true}
               source={{ html: html }}
@@ -136,8 +136,8 @@ export default class Example3 extends React.Component {
               nativeConfig={{
                 props: {
                   backgroundColor: '#ffffff',
-                  flex: 1,
-                },
+                  flex: 1
+                }
               }}
             />
           )}
@@ -148,23 +148,6 @@ export default class Example3 extends React.Component {
           </View>
         </ScrollView>
       </View>
-    );
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

@@ -1,23 +1,22 @@
-import React from 'react';
+import React from 'react'
 import {
   StyleSheet,
   View,
-  SafeAreaView,
   ScrollView,
   Text,
-  TouchableOpacity,
-} from 'react-native';
-import { Overlay } from 'teaset';
+  TouchableOpacity
+} from 'react-native'
+import { Overlay } from 'teaset'
 
-import StatusBar from '../components/StatusBar';
+import StatusBar from '../components/StatusBar'
 
 export default class Example5 extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       selectedIndex: -1,
-      selectedItem: null,
-    };
+      selectedItem: null
+    }
     this.Items = [
       "Aged Pu'er",
       'Bohea',
@@ -27,24 +26,25 @@ export default class Example5 extends React.Component {
       'Keemun',
       'Loungjing',
       'Pekoe',
-      'Tieguanyin',
-    ];
+      'Tieguanyin'
+    ]
   }
 
   // 页面初始
-  componentWillMount() {
-    console.log('componentWillMount Example5');
-  }
-  componentDidMount() {
-    console.log(' componentDidMountExample5');
+  componentWillMount () {
+    console.log('componentWillMount Example5')
   }
 
-  onItemPress(itemIndex) {
-    console.log(itemIndex);
+  componentDidMount () {
+    console.log(' componentDidMountExample5')
   }
 
-  show(Items) {
-    let overlayViewKey = null;
+  onItemPress (itemIndex) {
+    console.log(itemIndex)
+  }
+
+  show (Items) {
+    let overlayViewKey = null
     let overlayView = (
       <Overlay.PullView
         overlayOpacity={0.2}
@@ -54,12 +54,12 @@ export default class Example5 extends React.Component {
         <View
           style={{
             backgroundColor: '#fff',
-            maxHeight: 258,
+            maxHeight: 258
           }}
         >
           <View
             style={{
-              padding: 10,
+              padding: 10
             }}
           >
             <Text style={{ fontSize: 18, fontWeight: '700', color: 'black' }}>
@@ -71,7 +71,7 @@ export default class Example5 extends React.Component {
             style={{
               backgroundColor: '#fff',
               paddingLeft: 10,
-              paddingRight: 10,
+              paddingRight: 10
             }}
           >
             {Items &&
@@ -79,12 +79,12 @@ export default class Example5 extends React.Component {
                 <TouchableOpacity
                   key={'item' + index}
                   style={{
-                    paddingBottom: 10,
+                    paddingBottom: 10
                   }}
                   onPress={() => {
-                    this.onItemPress(index);
-                    Overlay.hide(overlayViewKey);
-                    overlayViewKey = null;
+                    this.onItemPress(index)
+                    Overlay.hide(overlayViewKey)
+                    overlayViewKey = null
                   }}
                 >
                   {index !== 0 && (
@@ -93,7 +93,7 @@ export default class Example5 extends React.Component {
                   <Text
                     style={{
                       color: '#232323',
-                      paddingTop: 10,
+                      paddingTop: 10
                     }}
                   >
                     {item}
@@ -103,12 +103,12 @@ export default class Example5 extends React.Component {
           </ScrollView>
         </View>
       </Overlay.PullView>
-    );
-    overlayViewKey = Overlay.show(overlayView);
+    )
+    overlayViewKey = Overlay.show(overlayView)
   }
 
-  render() {
-    let { selectedItem } = this.state;
+  render () {
+    let { selectedItem } = this.state
     return (
       <View style={styles.container}>
         <StatusBar />
@@ -119,22 +119,22 @@ export default class Example5 extends React.Component {
           </TouchableOpacity>
         </View>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 10
   },
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
-  },
-});
+    marginBottom: 5
+  }
+})

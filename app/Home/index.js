@@ -1,11 +1,11 @@
-import React from 'react';
-import { View } from 'react-native';
-import { ListRow } from 'teaset';
+import React from 'react'
+import { View } from 'react-native'
+import { ListRow } from 'teaset'
 
-import StatusBar from '../components/StatusBar';
+import StatusBar from '../components/StatusBar'
 
 class Home extends React.Component {
-  render() {
+  render () {
     return (
       <View style={{ flex: 1 }}>
         <StatusBar />
@@ -33,8 +33,12 @@ class Home extends React.Component {
           title="FlatList demo"
           onPress={() => this.props.navigation.navigate('FlatList')}
         />
+        <ListRow
+          title="tabView demo"
+          onPress={() => this.props.navigation.navigate('tabView')}
+        />
       </View>
-    );
+    )
   }
 }
-export default Home;
+export default Home

@@ -1,26 +1,27 @@
-import React from 'react';
-import { StyleSheet, View, Text, Animated, Easing } from 'react-native';
-import FlatListView from 'react-native-orzhtml-listview';
+import React from 'react'
+import { StyleSheet, View, Text, Animated, Easing } from 'react-native'
+import FlatListView from 'react-native-orzhtml-listview'
 
-import api from '../api/api';
-import StatusBar from '../components/StatusBar';
+import api from '../api/api'
+import StatusBar from '../components/StatusBar'
 
 class Example7 extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       headerText: '最新推荐成功',
-      refreshing: false,
-    };
-    this.textIndex = 0;
+      refreshing: false
+    }
+    this.textIndex = 0
   }
 
   // 页面初始
-  componentWillMount() {}
-  componentDidMount() {
-    this.mounted = true;
-    this.fetchData();
-    this.page = 0;
+  componentWillMount () {}
+
+  componentDidMount () {
+    this.mounted = true
+    this.fetchData()
+    this.page = 0
   }
 
   fetchData = async () => {
@@ -32,15 +33,15 @@ class Example7 extends React.Component {
       { name: '05', id: '105' },
       { name: '06', id: '106' },
       { name: '07', id: '107' },
-      { name: '08', id: '108' },
-    ]);
-    this._flatList && this._flatList.firstAddData(res);
+      { name: '08', id: '108' }
+    ])
+    this._flatList && this._flatList.firstAddData(res)
   };
 
   _setRefresh = (startFetch, abortFetch) => {
     this.setState({
-      refreshing: true,
-    });
+      refreshing: true
+    })
     api.mock([
       { name: '01', id: '101' },
       { name: '02', id: '102' },
@@ -53,53 +54,54 @@ class Example7 extends React.Component {
       { name: '09', id: '109' },
       { name: '10', id: '110' },
       { name: '11', id: '111' },
-      { name: '12', id: '112' },
+      { name: '12', id: '112' }
     ]).then(res => {
       this.setState({
         headerText: `本次推荐 ${res.length} 条更新 - ${this.textIndex}`,
-        refreshing: false,
-      });
-      this.page = 0;
-      this.textIndex++;
-      startFetch(res);
+        refreshing: false
+      })
+      this.page = 0
+      this.textIndex++
+      startFetch(res)
     }).catch(e => {
-      console.log(e);
-      abortFetch();
+      console.log(e)
+      abortFetch()
     })
   };
+
   _setEndReached = (startFetch, abortFetch) => {
     if (this.page === 1) {
-      startFetch([]);
-      return false;
+      startFetch([])
+      return false
     }
-     api.mock([
+    api.mock([
       { name: '13', id: '113' },
       { name: '14', id: '114' },
       { name: '15', id: '115' },
       { name: '16', id: '116' },
-      { name: '17', id: '117' },
+      { name: '17', id: '117' }
     ]).then(res => {
-      startFetch(res);
-    this.page = 1;
+      startFetch(res)
+      this.page = 1
     }).catch(e => {
-      console.log(e);
-      abortFetch();
+      console.log(e)
+      abortFetch()
     })
   };
 
   _renderItem = ({ item, index }) => {
-    let key = '_renderItem-' + index;
-    return <RenderItems key={key} data={item} />;
+    let key = '_renderItem-' + index
+    return <RenderItems key={key} data={item} />
   };
 
   _AnimatedHeaderView = () => {
-    let { headerText, refreshing } = this.state;
+    let { headerText, refreshing } = this.state
     return (
       <AnimatedHeaderView headerText={headerText} refreshing={refreshing} />
-    );
+    )
   };
 
-  render() {
+  render () {
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="red" />
@@ -120,88 +122,94 @@ class Example7 extends React.Component {
           paginationBtnText="加载更多..."
         />
       </View>
-    );
+    )
   }
 }
 
 class RenderItems extends React.PureComponent {
-  render() {
-    let { data } = this.props;
+  render () {
+    let { data } = this.props
     return (
       <View
         style={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
       >
         <Text style={{ fontSize: 15, color: 'black' }}>{data.name}</Text>
       </View>
-    );
+    )
   }
 }
 
 class AnimatedHeaderView extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.spinWidthValue = new Animated.Value(0);
-    this.spinHeightValue = new Animated.Value(0);
-    this.timer = null;
+  constructor (props) {
+    super(props)
+    this.spinWidthValue = new Animated.Value(0)
+    this.spinHeightValue = new Animated.Value(0)
+    this.timer = null
     this.state = {
-      height: 0,
-    };
+      height: 0
+    }
   }
-  componentDidMount() {}
-  componentWillReceiveProps(nextProps) {
-    let { refreshing } = this.props;
+
+  componentDidMount () {}
+
+  componentWillReceiveProps (nextProps) {
+    let { refreshing } = this.props
     if (refreshing === nextProps.refreshing) {
-      return false;
+      return false
     }
     if (!nextProps.refreshing) {
-      this._start();
+      this._start()
     }
   }
-  componentWillUnmount() {
-    this._stopTimer();
+
+  componentWillUnmount () {
+    this._stopTimer()
   }
+
   _start = () => {
-    this.spinWidthValue.setValue(0);
-    this.spinHeightValue.setValue(0);
-    this._stopTimer();
+    this.spinWidthValue.setValue(0)
+    this.spinHeightValue.setValue(0)
+    this._stopTimer()
 
     this.setState({
-        height: 34,
-      }, () => {
-        Animated.timing(this.spinWidthValue, {
-          toValue: 1,
-          duration: 300,
-          easing: Easing.inOut(Easing.linear),
-        }).start(() => {
-          this.timer = setTimeout(() => {
-            Animated.timing(this.spinHeightValue, {
-              toValue: 1,
-              duration: 200,
-              easing: Easing.inOut(Easing.linear),
-            }).start();
-            this.setState({
-              height: this.spinHeightValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [34, 0],
-              }),
-            });
-          }, 1000);
-        });
-      },
-    );
+      height: 34
+    }, () => {
+      Animated.timing(this.spinWidthValue, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.inOut(Easing.linear)
+      }).start(() => {
+        this.timer = setTimeout(() => {
+          Animated.timing(this.spinHeightValue, {
+            toValue: 1,
+            duration: 200,
+            easing: Easing.inOut(Easing.linear)
+          }).start()
+          this.setState({
+            height: this.spinHeightValue.interpolate({
+              inputRange: [0, 1],
+              outputRange: [34, 0]
+            })
+          })
+        }, 1000)
+      })
+    }
+    )
   };
+
   _stopTimer = () => {
-    this.timer && clearTimeout(this.timer);
-    this.timer = null;
+    this.timer && clearTimeout(this.timer)
+    this.timer = null
   };
-  render() {
-    let { headerText } = this.props;
-    let { height } = this.state;
+
+  render () {
+    let { headerText } = this.props
+    let { height } = this.state
 
     const width = this.spinWidthValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [100, global.sw],
-    });
+      outputRange: [100, global.sw]
+    })
 
     return (
       <Animated.View
@@ -209,7 +217,7 @@ class AnimatedHeaderView extends React.PureComponent {
           justifyContent: 'center',
           alignItems: 'center',
           overflow: 'hidden',
-          height,
+          height
         }}
       >
         <Animated.View
@@ -218,20 +226,20 @@ class AnimatedHeaderView extends React.PureComponent {
             justifyContent: 'center',
             alignItems: 'center',
             height: 34,
-            width,
+            width
           }}
         >
           <Text style={{ fontSize: 12, color: '#3289bf' }}>{headerText}</Text>
         </Animated.View>
       </Animated.View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-});
+    flex: 1
+  }
+})
 
-export default Example7;
+export default Example7
