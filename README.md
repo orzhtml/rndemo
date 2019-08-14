@@ -1,2 +1,0 @@
-# rndemo
-react-native-demo

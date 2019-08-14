@@ -4,54 +4,43 @@
  *
  * @format
  * @flow
- * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
-import React from 'react';
-import { View, Text } from 'react-native';
-import Routing from './app/Routing';
+import React from 'react'
+import { View } from 'react-native'
+import Routing from './app/Routing'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-      isload: false,
-    };
+      isload: false
+    }
   }
 
   // 页面初始
-  componentWillMount() {
+  componentWillMount () {
     this.setState({
-      isload: true,
-    });
+      isload: true
+    })
   }
 
-  componentDidMount() {}
+  componentDidMount () {}
 
-  render() {
-    let { isload } = this.state;
+  render () {
+    let { isload } = this.state
     if (!isload) {
       return (
         <View
           style={{
             flex: 1,
-            backgroundColor: '#fff',
+            backgroundColor: '#fff'
           }}
         />
-      );
+      )
     }
-    // return (
-    //   <View
-    //     style={{
-    //       flex: 1,
-    //       backgroundColor: '#fff',
-    //     }}
-    //    >
-    //     <Text style={{ fontSize: 15, color: 'black' }}>adasdasdasklhd</Text>
-    //   </View>
-    // );
-    return <Routing />;
+    return <Routing />
   }
 }
 
-export default App;
+export default App

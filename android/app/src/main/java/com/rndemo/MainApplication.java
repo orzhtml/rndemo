@@ -5,7 +5,13 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.brentvatne.react.ReactVideoPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
+import com.github.yamill.orientation.OrientationPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.dylanvann.fastimage.FastImageViewPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.reactnativecommunity.slider.ReactSliderPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -28,7 +34,13 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RNCWebViewPackage(),
             new ReactVideoPackage(),
-            new RNGestureHandlerPackage()
+            new ReanimatedPackage(),
+            new OrientationPackage(),
+            new PickerPackage(),
+            new RNGestureHandlerPackage(),
+            new FastImageViewPackage(),
+            new RNDeviceInfo(),
+            new ReactSliderPackage()
       );
     }
 
