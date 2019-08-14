@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text, Animated, Easing } from 'react-native';
+import FlatListView from 'react-native-orzhtml-listview';
 
 import api from '../api/api';
 import StatusBar from '../components/StatusBar';
-import FlatListView from '../libs/FlatList';
 
 class Example7 extends React.Component {
   constructor(props) {
